@@ -24,9 +24,9 @@ const Box =({no,chance,winner,box}) =>{
 
      return(
         <TouchableOpacity onPress={check}>
-        <View style={{width:width*.28,height:width*.28,margin:10,backgroundColor:'#0f91d7',borderRadius:10,justifyContent:'center',}}>
-            {boxno[no]!==null?boxno[no]==='x'?(<Feather name='x' size={width*.29} color='#000' style={{}}/>):
-            (<Feather name='circle' size={width*.25} color='#10e557' style={{alignSelf:'center',}}/>):<></>}
+        <View style={{width:width*.2,height:width*.2,margin:10,backgroundColor:'#0f91d7',borderRadius:10,justifyContent:'center',}}>
+            {boxno[no]!==null?boxno[no]==='x'?(<Feather name='x' size={width*.18} color='#000' style={{alignSelf:'center'}}/>):
+            (<Feather name='circle' size={width*.15} color='#10e557' style={{alignSelf:'center',}}/>):<></>}
         </View>
         </TouchableOpacity>
      )

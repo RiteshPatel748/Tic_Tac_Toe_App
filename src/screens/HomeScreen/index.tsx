@@ -1,10 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
+  Alert,
   Dimensions,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -14,12 +17,15 @@ import Feather from 'react-native-vector-icons/Feather';
 import Box from '../../components/box';
 
 const GameHome = () => {
+  const [bolean,setBolean]=useState(false)
+  const [player1,setPlayer1]=useState('')
+  const [player2,setPlayer2]=useState('')
   const {width, height} = Dimensions.get('screen');
   const [isxChance, setIsxChance] = useState(true);
   const [winner, setWinner] = useState(null);
   const [tie, setTie] = useState(null);
   const [boxno, setBoxno] = useState(Array(9).fill(null));
-  const player = isxChance ? 'x' : 'o';
+  const player = isxChance ? player1 : player2;
   // console.log(boxno);
 
   const box = no => {
@@ -50,8 +56,8 @@ const GameHome = () => {
         boxno[arr[i][0]] === boxno[arr[i][1]] &&
         boxno[arr[i][0]] === boxno[arr[i][2]]
       ) {
-        if (player === 'x') setWinner('O');
-        else setWinner('X');
+        if (player === player1) setWinner(player2.toUpperCase());
+        else setWinner(player1.toUpperCase());
         j = 1;
       }
     }
@@ -69,36 +75,41 @@ const GameHome = () => {
     CheckWinner();
   }, [isxChance]);
 
-  return (
-    <View
-      style={{
-        height: '100%',
-        width: '100%',
-        backgroundColor: '#10e5d0',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}>
-      <View style={{borderColor: '#fff', flexDirection: 'row'}}>
+// ****----------------------------****
+
+const callPlay=()=>
+{
+  if(!player1 || !player2)
+  {return (Alert.alert("Enter Player Name"))}
+  if(player1===player2)
+  {return (Alert.alert("Please enter different name"))}
+  setBolean(true)
+}
+
+const gameHome=()=>{
+  return(
+    <>
+      <View style={{borderColor: '#fff', flexDirection: 'row',marginBottom:10,marginHorizontal:40}}>
         {tie == null &&
           (winner == null ? (
-            <Text style={{fontSize: 50, color: '#242e2d', fontWeight: 'bold'}}>
+            <Text style={{fontSize: 25, color: '#242e2d', fontWeight: 'bold'}}>
               {player.toUpperCase()} CHANCE
             </Text>
           ) : (
-            <Text style={{fontSize: 50, color: '#de7635', fontWeight: 'bold'}}>
+            <Text style={{fontSize: 25, color: '#de7635', fontWeight: 'bold'}}>
               {winner} WIN
             </Text>
           ))}
         {tie == 'DRAW' && (
-          <Text style={{fontSize: 50, color: '#cc0041', fontWeight: 'bold'}}>
+          <Text style={{fontSize: 25, color: '#cc0041', fontWeight: 'bold'}}>
             DRAW
           </Text>
         )}
         <FontAwesome
           name="refresh"
-          size={width * 0.11}
+          size={width * 0.07}
           color="#242e2d"
-          style={{marginLeft: 20, top: 10}}
+          style={{marginLeft: 20, top: 4}}
           onPress={() => {
             setIsxChance(true);
             setWinner(null);
@@ -124,7 +135,102 @@ const GameHome = () => {
           {box(8)}
         </View>
       </View>
+      </>
+  )
+}
+
+  return (
+    <View
+      style={{
+        height: '100%',
+        width: '100%',
+        backgroundColor: '#10e5d0',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
+      
+    {!bolean?
+(      <View style={{borderColor: '#fff',}} >
+        <Text style={styles.text}>
+        Player1
+        </Text>
+        <View style={[styles.ellipseGroup, styles.vectorParentSpaceBlock]}> 
+          <TextInput
+            style={styles.input}
+            value={player1}
+            placeholder="Enter Name"
+            keyboardType="default"
+            placeholderTextColor="#fff"
+            onChangeText={setPlayer1}
+          />
+        </View>
+        <Text style={styles.text}>
+        Player2
+        </Text>
+        <View style={[styles.ellipseGroup, styles.vectorParentSpaceBlock]}> 
+          <TextInput
+            style={styles.input}
+            value={player2}
+            placeholder="Enter Name"
+            keyboardType="default"
+            placeholderTextColor="#fff"
+            onChangeText={setPlayer2}
+          />
+        </View>
+          <TouchableOpacity style={styles.button} onPress={callPlay}>
+            <Text style={{fontSize: 24, color: '#242e2d', fontWeight: 'bold',textAlign:'center'}}>
+              Play
+            </Text>
+          </TouchableOpacity>
+      </View>):
+      (gameHome())
+    }
+    <Text style={{fontSize: 6, color: '#242e2d', fontWeight: 'bold',top:'-61%',left:'-42%'}}>
+        Ritesh Patel
+    </Text>
     </View>
   );
 };
+
+
+const styles = StyleSheet.create({
+  ellipseGroup: {
+    width:250,
+    paddingHorizontal: 10,
+    height: 40,
+    marginTop: 5,
+    alignItems: "center",
+    borderRadius: 10,
+    backgroundColor: "#35455d",
+    alignSelf: "stretch",
+  },
+  vectorParentSpaceBlock: {
+    marginTop: 5,
+    paddingVertical: 0,
+    // flexDirection: "row",
+  },
+  button:{
+    backgroundColor:'#0da192',
+    justifyContent:'center',
+    marginTop:40,
+    borderWidth:1,
+    borderRadius:10,
+    alignSelf:'center',
+    paddingHorizontal:70,
+    paddingVertical:3
+  },
+  input:{
+    marginLeft: 10,
+    width:'100%',
+    alignSelf: "stretch",
+    flex: 1,
+    color:'#fff'
+  },
+  text:{
+    fontSize: 18, 
+    color: '#242e2d', 
+    fontWeight: 'bold'
+  },
+})
+
 export default GameHome;
